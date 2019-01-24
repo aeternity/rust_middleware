@@ -4,9 +4,9 @@ services:
     image: postgres:10.6
     restart: unless-stopped
     environment:
-      POSTGRES_USER: middleware
-      POSTGRES_PASSWORD: middleware
-      POSTGRES_DB: middleware
+      - POSTGRES_USER=middleware
+      - POSTGRES_PASSWORD=middleware
+      - POSTGRES_DB=middleware
     volumes: 
       - ./scripts/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     expose: 
@@ -21,7 +21,7 @@ services:
       - "8000:8000"
       - "80:80"
     environment: 
-      EPOCH_URL: https://sdk-testnet.aepps.com
-      DATABASE_URL: postgres://middleware:middleware@db/middleware
+      - EPOCH_URL=https://sdk-testnet.aepps.com
+      - DATABASE_URL=postgres://middleware:middleware@db/middleware
     depends_on:
       - db

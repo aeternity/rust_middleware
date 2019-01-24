@@ -19,7 +19,6 @@ RUN apt-get update && apt-get -y install libpq5 libcurl3 libcurl3-gnutls
 COPY --from=build /aepp-middleware/target/release/aepp-middleware /app/aepp-middleware
 WORKDIR /app
 COPY ./Rocket.example.toml ./Rocket.toml
-COPY ./.env ./.env
 ENTRYPOINT ["/app/aepp-middleware"]
 CMD ["-p", "-s"]
 EXPOSE 8000:8000
