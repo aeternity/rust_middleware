@@ -1,0 +1,23 @@
+[global.databases]
+middleware = { url = "postgres://middleware:middleware@db/middleware" }
+
+[development]
+address = "0.0.0.0"
+port = 8000
+workers = 4
+log = "normal"
+limits = { forms = 32768 }
+
+[staging]
+address = "0.0.0.0"
+port = 80
+workers = 4
+log = "normal"
+limits = { forms = 32768 }
+
+[production]
+address = "0.0.0.0"
+port = 80
+workers = 4
+log = "critical"
+limits = { forms = 32768 }
