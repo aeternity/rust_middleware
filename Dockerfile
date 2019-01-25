@@ -13,7 +13,6 @@ RUN rm src/*.rs && rm -rf target/release/deps/aepp_middleware*
 COPY src/ ./src/
 RUN cargo build --release
 
-# since rust:1.32.0 is based on
 FROM debian:stretch-slim
 RUN apt-get update && apt-get -y install libpq5 libcurl3 libcurl3-gnutls
 COPY --from=build /aepp-middleware/target/release/aepp-middleware /app/aepp-middleware

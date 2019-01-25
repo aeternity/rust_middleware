@@ -1,5 +1,17 @@
 version: '3.1'
 services:
+  middleware:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "80:80"
+    environment: 
+      - EPOCH_URL=https://sdk-mainnet.aepps.com
+      - DATABASE_URL=postgres://middleware:middleware@db/middleware
+    depends_on:
+      - db
+
   db:
     image: postgres:10.6
     restart: unless-stopped
@@ -9,19 +21,10 @@ services:
       - POSTGRES_DB=middleware
     volumes: 
       - ./scripts/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-    expose: 
-      - 5432
+      - mdw-postgres-db-volume:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  middleware:
-    build:
-      context: .
-      dockerfile: ./middleware.Dockerfile
-    ports:
-      - "8000:8000"
-      - "80:80"
-    environment: 
-      - EPOCH_URL=https://sdk-testnet.aepps.com
-      - DATABASE_URL=postgres://middleware:middleware@db/middleware
-    depends_on:
-      - db
+    
+volumes:
+    mdw-postgres-db-volume:
+      external: false
