@@ -3,11 +3,11 @@ services:
   middleware:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./docker/Dockerfile
     ports:
       - "80:80"
     environment: 
-      - EPOCH_URL=https://sdk-mainnet.aepps.com
+      - EPOCH_URL=https://roma-net.aepps.com
       - DATABASE_URL=postgres://middleware:middleware@db/middleware
     depends_on:
       - db
@@ -20,11 +20,11 @@ services:
       - POSTGRES_PASSWORD=middleware
       - POSTGRES_DB=middleware
     volumes: 
-      - ./scripts/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-      - mdw-postgres-db-volume:/var/lib/postgresql/data
+      - ./docker/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ae-mdw-postgres-volume:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     
 volumes:
-    mdw-postgres-db-volume:
+    ae-mdw-postgres-volume:
       external: false

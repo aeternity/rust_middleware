@@ -1,5 +1,5 @@
 [global.databases]
-middleware = { url = "postgres://middleware:middleware@db/middleware" }
+middleware = { url = "postgres://middleware:middleware@localhost/middleware" }
 
 [development]
 address = "0.0.0.0"
