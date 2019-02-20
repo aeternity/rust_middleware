@@ -1,0 +1,1 @@
+drop if exits materialized view public.account_spendtx_balance;
