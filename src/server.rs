@@ -439,6 +439,19 @@ fn transactions_for_contract_address(
 
 }
 
+#[get("/accounts?<limit>")]
+fn get_accounts(_state: State<MiddlewareServer>, limit: Option<String>,) -> Json<JsonValue> {
+    let limit_sql = match limit {
+        Some(val) => { val },
+        None => { String::from("all") }
+    };
+    let sql = format!("select jsonb_agg(jso) result from \
+                    (select * from public.account_spendtx_balance limit {}) jso;", limit_sql);
+    let rows = SQLCONNECTION.get().unwrap().query(&sql, &[]).unwrap();
+    let result: serde_json::Value = rows.get(0).get(0);
+    Json(json!(result))
+}
+
 impl MiddlewareServer {
     pub fn start(self) {
         let allowed_origins = AllowedOrigins::all();
@@ -452,6 +465,7 @@ impl MiddlewareServer {
 
         rocket::ignite()
             .mount("/middleware", routes![current_size])
+            .mount("/middleware", routes![get_accounts])
             .mount("/middleware", routes![size])
             .mount("/middleware", routes![transaction_rate])
             .mount("/middleware", routes![transactions_for_account])
