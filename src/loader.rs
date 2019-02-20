@@ -368,6 +368,7 @@ impl BlockLoader {
             }
             count += 1;
         }
+        self.refresh_accounts_view(connection); //refresh accounts view
         Ok((key_block_id, count))
     }
 
@@ -623,5 +624,10 @@ impl BlockLoader {
             }
         }
         Ok(differences)
+    }
+
+    pub fn refresh_accounts_view(&self, connection: &PgConnection) {
+        let result = sql_query("refresh materialized view public.account_spendtx_balance;")
+                    .execute(connection);
     }
 }
