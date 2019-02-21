@@ -439,14 +439,11 @@ fn transactions_for_contract_address(
 
 }
 
-#[get("/accounts?<limit>")]
-fn get_accounts(_state: State<MiddlewareServer>, limit: Option<String>,) -> Json<JsonValue> {
-    let limit_sql = match limit {
-        Some(val) => { val },
-        None => { String::from("all") }
-    };
+#[get("/account?<limit>&<page>")]
+fn get_accounts(_state: State<MiddlewareServer>, limit: Option<i32>, page: Option<i32>) -> Json<JsonValue> {
+    let (offset_sql, limit_sql) = offset_limit(limit, page);
     let sql = format!("select jsonb_agg(jso) result from \
-                    (select * from public.account_spendtx_balance limit {}) jso;", limit_sql);
+                    (select * from public.account_spendtx_balance limit {} offset {} ) jso;", limit_sql, offset_sql);
     let rows = SQLCONNECTION.get().unwrap().query(&sql, &[]).unwrap();
     let result: serde_json::Value = rows.get(0).get(0);
     Json(json!(result))
