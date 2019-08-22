@@ -11,7 +11,7 @@
         />
         <Generations>
           <Generation
-            v-for="(generation, number) in generations.slice(0,5)"
+            v-for="(generation, number) in generations"
             :key="number"
             class="generation-link"
             :data="generation"
@@ -19,6 +19,7 @@
         </Generations>
       </div>
       <div
+        v-if="transactions.length"
         class="transactions-wrapper"
       >
         <PageHeader
@@ -27,7 +28,7 @@
         />
         <TxList>
           <TXListItem
-            v-for="(transaction, index) in transactions.reverse().slice(0,5)"
+            v-for="(transaction, index) in transactions"
             :key="index"
             :data="transaction"
           />
@@ -55,19 +56,19 @@ export default {
     PageHeader
   },
   computed: {
-    ...mapState('generations', {
+    ...mapState('websocket', {
       generations (state) {
-        return Object.values(state.generations).reverse()
+        return state.generations
       }
     }),
-    ...mapState('transactions', {
+    ...mapState('websocket', {
       transactions (state) {
-        return Object.values(state.transactions)
+        return state.transactions
       }
     })
   },
   async mounted () {
-    this.$store.dispatch('setupWebSocket')
+    this.$store.dispatch('websocket/initializeWs')
     if (!Object.keys(this.$store.state.generations.generations).length) {
       await this.$store.dispatch('height')
       this.$store.dispatch('generations/getLatestGenerations', 10)

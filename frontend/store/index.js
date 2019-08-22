@@ -133,13 +133,14 @@ export const actions = {
       }
     }
   },
-  async nuxtServerInit ({ dispatch }, { context }) {
+  async nuxtServerInit ({ state, dispatch }, { context }) {
     dispatch('status')
     await dispatch('height')
     await Promise.all([
       dispatch('generations/nuxtServerInit', context),
       dispatch('transactions/nuxtServerInit', context)
     ])
+    dispatch('websocket/nuxtServerInit', { generations: state.generations.generations, transactions: state.transactions.transactions })
   }
 }
 
