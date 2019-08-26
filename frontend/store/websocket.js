@@ -1,5 +1,3 @@
-// import Vue from 'vue'
-
 export const state = () => ({
   generations: [],
   transactions: [],
@@ -37,19 +35,6 @@ export const mutations = {
     if (state.transactions.length >= 5) {
       state.transactions.splice(5)
     }
-  },
-  updateGenerationTx: function (state, tx) {
-    const gen = state.generations.find((el) => {
-      return el.height === tx.block_height
-    })
-    if (gen) {
-      if (!gen.micro_blocks[tx.block_hash]) {
-        gen.micro_blocks[tx.block_hash] = { transactions: {} }
-      }
-      gen.micro_blocks[tx.block_hash].transactions[tx.hash] = tx
-      const index = state.generations.findIndex(el => el.height === gen.height)
-      state.generations[index] = gen
-    }
   }
 }
 
@@ -81,25 +66,25 @@ export const actions = {
     }
   },
 
-  processWsMessage: function ({ commit }, data) {
+  processWsMessage: function ({ rootState: { height }, commit, dispatch }, data) {
     if (data.includes('payload')) {
       data = JSON.parse(data).payload
       if (data.tx) {
         commit('setTransactions', data)
-        commit('updateGenerationTx', data)
       } else if (data.beneficiary) {
         commit('setGenerations', data)
+        if (data.height > height) {
+          dispatch('height')
+        }
       }
     }
   },
   nuxtServerInit ({ dispatch, commit }, context) {
-    const transactions = Object.values(context.transactions)
-    transactions.splice(0, 5)
-    const generations = Object.values(context.generations)
-    generations.splice(0, 5)
-    for (let i = 0; i < 5; i++) {
-      commit('setGenerations', generations[i])
-      commit('setTransactions', transactions[i])
-    }
+    Object.values(context.transactions).forEach(element => {
+      commit('setTransactions', element)
+    })
+    Object.values(context.generations).forEach(element => {
+      commit('setGenerations', element)
+    })
   }
 }
