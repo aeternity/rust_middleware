@@ -499,7 +499,7 @@ $ curl -s 'https://mdw.aepps.com/middleware/status' | jq
 ```
 
 
-The ‘OK’ field is set to false when the queue length is more than 2, and/or the seconds_since_last_block is > 1200 seconds. The teme can be overridden by the environment variable STATUS_MAX_BLOCK_AGE
+The ‘OK’ field is set to false when the queue length is more than 2, and/or the seconds_since_last_block is > 1200 seconds. The time can be overridden by the environment variable STATUS_MAX_BLOCK_AGE
 
 
 ```
