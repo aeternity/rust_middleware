@@ -56,12 +56,22 @@ There is a hosted middleware for the æternity mainnet at https://mainnet.aetern
 
 ### Run via Docker
 
-This setup runs node, compiler, postgres and middleware together.
+This setup runs node, compiler, postgres and aeternal together.
 
+In the `examples` folder there are 2 setup for docker:
+- `examples/docker-compose.yml` that includes also the node configuration
+- `examples/docker-compose.existing-node.yaml` that relies on an existing node
+
+### Run docker including the node
 - Install Docker and Docker Compose.
-- Update `docker/aeternity.yaml` as per your requirement.
-- Copy `.env.example` to `.env` and if required, edit the node and compiler version.
-- From the project root run, run `docker-compose up`
+- Update `examples/node/config.yaml` as per your requirement.
+- From the project `examples` folders run `docker-compose up`
+
+### Run docker including relying on an existing node
+- Install Docker and Docker Compose
+- Make sure you can reach the node external port from your machine
+- Edit the file `examples/docker-compose.existing-node.yaml` and set the url of your node as explained in the file
+- From the project `examples` folder run `docker-compose up -f docker-compose.existing-node.yaml`
 
 ### Tips and tricks
 
