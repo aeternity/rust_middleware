@@ -1,5 +1,3 @@
-peers: []
-
 http:
   external:
     port: 3013
