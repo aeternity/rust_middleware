@@ -1,4 +1,4 @@
-peers: []
+# peers: []
 
 http:
   external:
