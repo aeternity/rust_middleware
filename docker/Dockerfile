@@ -32,6 +32,9 @@ WORKDIR /app
 COPY ./docker/Rocket.toml ./Rocket.toml
 # copy minimal logger configuration
 COPY ./docker/log4rs-minimal.yaml /logs/log.yaml
+# copy the wait-for-it.sh script
+COPY ./docker/wait-for-it.sh /bin/wait-for-it.sh
+# set the entry-point
 ENTRYPOINT ["/app/aeternal"]
 CMD ["-p", "-s", "-w"]
 EXPOSE 80 3020
