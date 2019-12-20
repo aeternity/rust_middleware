@@ -1,0 +1,53 @@
+version: '3.1'
+services:
+  aeternal:
+    # Hint: adjust the version to one available on 
+    # https://hub.docker.com/r/aeternity/aeternal/tags
+    image: aeternity/aeternal:develop
+    ports:
+      - "8080:80"
+      - "3020:3020"
+    entrypoint: /bin/wait-for-it.sh node:3013 -- ./aeternal -p -s -w
+    environment:
+      - NODE_URL=node:3013
+      - AESOPHIA_URL=compiler:3080
+      - DATABASE_URL=postgres://aeternal:aeternal@db/aeternal
+    depends_on:
+      - db
+      - node
+      - compiler
+
+  node:
+    # Hint: adjust the version to one available on 
+    # https://hub.docker.com/r/aeternity/aeternity/tags
+    image: aeternity/aeternity:v5.2.0
+    hostname: node
+    expose: [3013, 3113, 3014]
+    environment:
+      AETERNITY_CONFIG: /home/aeternity/aeternity.yaml
+    volumes:
+    - ${PWD}/node/config.yaml:/home/aeternity/aeternity.yaml
+    - node_db:/home/aeternity/node/data/mnesia
+
+  db:
+    image: postgres:11
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=aeternal
+      - POSTGRES_PASSWORD=aeternal
+      - POSTGRES_DB=aeternal
+    volumes: 
+      - ae-mdw-postgres-volume:/var/lib/postgresql/data
+    expose: [5432]
+
+  compiler:
+    # Hint: adjust the version to one available on 
+    # https://hub.docker.com/r/aeternity/aesophia_http/tags
+    image: aeternity/aesophia_http:v4.1.0
+    hostname: compiler
+    expose: [3080]
+    
+volumes:
+    ae-mdw-postgres-volume:
+      external: false
+    node_db:

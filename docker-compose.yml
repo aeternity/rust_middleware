@@ -7,14 +7,11 @@ services:
     ports:
       - "8080:80"
       - "3020:3020"
-    entrypoint: ./docker/wait-for-it.sh node:3013 -- ./aeternal -p -s -w
+    entrypoint: /bin/wait-for-it.sh node:3013 -- ./aeternal -p -s -w
     environment:
       - NODE_URL=node:3013
       - AESOPHIA_URL=compiler:3080
       - DATABASE_URL=postgres://middleware:middleware@db/middleware
-      - LOG_CONF=/logs/log.yaml
-    volumes:
-      - ${PWD}/docker/wait-for-it.sh:/app/docker/wait-for-it.sh
     depends_on:
       - db
       - node
@@ -38,10 +35,10 @@ services:
     hostname: node
     expose: [3013, 3113, 3014]
     environment:
-      AETERNITY_CONFIG: /home/aeterinty/aeternity.yaml
+      AETERNITY_CONFIG: /home/aeternity/aeternity.yaml
     volumes:
-      - ${PWD}/docker/aeternity.yaml:/home/aeterinty/aeternity.yaml
-      - node_db:/home/aeterinty/node/data/mnesia
+      - ${PWD}/docker/aeternity.yaml:/home/aeternity/aeternity.yaml
+      - node_db:/home/aeternity/node/data/mnesia
 
   db:
     image: postgres:11

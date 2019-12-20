@@ -1,0 +1,46 @@
+
+# This example configuration assumes that there is
+# a reachable node at MY_NODE_URL address:
+# change the MY_NODE_URL placeholder with the address
+# of the external endpoint of an existing node ex: 10.123.123.123:3013
+
+version: '3.1'
+services:
+  aeternal:
+    # Hint: adjust the version to one available on 
+    # https://hub.docker.com/r/aeternity/aeternal/tags
+    image: aeternity/aeternal:develop
+    ports:
+      - "8080:80"
+      - "3020:3020"
+    entrypoint: ./aeternal -p -s -w
+    environment:
+      - NODE_URL=______________MY_NODE_URL_______________
+      - AESOPHIA_URL=compiler:3080
+      - DATABASE_URL=postgres://aeternal:aeternal@db/aeternal
+    depends_on:
+      - db
+      - compiler
+
+  db:
+    image: postgres:11
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=aeternal
+      - POSTGRES_PASSWORD=aeternal
+      - POSTGRES_DB=aeternal
+    volumes: 
+      - ae-mdw-postgres-volume:/var/lib/postgresql/data
+    expose: [5432]
+
+  compiler:
+    # Hint: adjust the version to one available on 
+    # https://hub.docker.com/r/aeternity/aesophia_http/tags
+    image: aeternity/aesophia_http:v4.1.0
+    hostname: compiler
+    expose: [3080]
+    
+volumes:
+    ae-mdw-postgres-volume:
+      external: false
+    node_db:
