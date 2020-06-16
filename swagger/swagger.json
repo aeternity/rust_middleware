@@ -592,7 +592,7 @@
         "parameters": [{
           "name": "hash",
           "in": "path",
-          "required": false,
+          "required": true,
           "type": "string",
           "description": "The hash of the name"
         }],
