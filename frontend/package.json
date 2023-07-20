@@ -26,7 +26,7 @@
     "camelcase-keys-deep": "0.1.0",
     "clipboard-copy": "3.0.0",
     "normalize-scss": "7.0.1",
-    "nuxt": "2.9.2",
+    "nuxt": "2.17.1",
     "vue": "2.6.10",
     "vue-multiselect": "2.1.6",
     "vue-slider-component": "3.0.41"
